@@ -3,6 +3,7 @@
   <head></head>
   <body>
     <button id="disconnect-button">Disconnect</button>
+    <button id="hello-button">Send Hello</button>
     <h1>Server Sent Events</h1>
     <ul id="events"></ul>
     <script>
@@ -18,6 +19,17 @@
       disconnectButton.addEventListener('click', () => {
         sse.close()
         console.log('SSE connection closed.')
+      })
+      const helloButton = document.querySelector('#hello-button')
+      helloButton.addEventListener('click', () => {
+        fetch('/trigger', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ value: 'Hello' }),
+        })
       })
     </script>
   </body>

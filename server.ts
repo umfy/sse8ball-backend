@@ -11,6 +11,7 @@ import {
   isHttpError,
   Status,
 } from 'https://deno.land/x/oak@v10.5.1/mod.ts'
+import { oakCors } from 'https://deno.land/x/cors@v1.2.2/oakCors.ts'
 
 import router from './routes.ts'
 
@@ -63,6 +64,7 @@ app.use(async (context, next) => {
 })
 
 // Use the router
+app.use(oakCors())
 app.use(router.routes())
 app.use(router.allowedMethods())
 // A basic 404 page
@@ -74,5 +76,5 @@ app.addEventListener('listen', ({ hostname, port, serverType }) => {
   console.log(bold('  using HTTP server: ' + yellow(serverType)))
 })
 
-await app.listen({ hostname: '127.0.0.1', port: 8000 })
+await app.listen({port: 8000 })
 console.log(bold('Finished.'))

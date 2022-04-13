@@ -52,6 +52,7 @@ router
       // this causes uncaught errors, cannot trycatch it
       clients[i].dispatchEvent(evt)
     }
+    ctx.response.status = Status.Accepted
   })
 
 export default router
