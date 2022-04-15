@@ -18,6 +18,14 @@ router
       path: 'sseServer_index.html',
     })
   })
+
+  // .get('/static/style.css', async (ctx) => {
+  //   await ctx.send({
+  //     root: `${Deno.cwd()}/public/static`,
+  //     path: 'style.css',
+  //   })
+  // })
+
   // for any clients that request the `/sse` endpoint, we will send a message
   // every 2 seconds.
   .get('/sse', (ctx: Context) => {
