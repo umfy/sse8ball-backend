@@ -132,14 +132,16 @@
         console.log('SSE connection closed.')
         },
         sayHello(){
+          console.log('sending hello...')
           fetch('/trigger', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ value: 'Hello' }),
-        })
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ value: 'Hello' }),
+          })
+          console.log('hello sent.')
         }
       }).mount()
     </script>
