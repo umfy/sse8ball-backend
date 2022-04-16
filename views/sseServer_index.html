@@ -223,7 +223,7 @@
           >{{gameStart ? 'Aktywuj' : players[1].ball === 1 ? "Połówki" :
           "Pełne"}}</a
         >
-        <ul class="no-bullets">
+        <ul class="no-bullets" id="logOne">
           <li class="m-3" v-for="log of players[1].log">{{log}}</li>
         </ul>
       </div>
