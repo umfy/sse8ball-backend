@@ -293,8 +293,14 @@
               value
             )
           }
-          if (value !== 0 && value !== 8) this.ballsPut.push(value)
+          this.ballsPut.push(value)
           this.movesCount += 1
+          // reset ballsPut for white and black
+          if (value === 0 || value === 8) {
+            setTimeout(() => {
+              this.ballsPut = this.ballsPut.filter((el) => el !== value)
+            }, 1500)
+          }
           // this.players[this.activePlayer].log.push(value)
           if (value === 0) {
             // white
@@ -317,10 +323,12 @@
               return this.togglePlayer(interval)
             }
             if (this.players[this.activePlayer].score === 7) {
+              this.players[this.activePlayer].score = 8
               return this.players[this.activePlayer].log.push(
                 `${this.movesCount}. Gratulacje, piękne zwycięstwo!`
               )
             }
+            this.players[this.inactivePlayer].score = 8
             return this.players[this.activePlayer].log.push(
               `${this.movesCount}. Wbito czarną bilę, przegrywasz!`
             )
