@@ -151,20 +151,6 @@
           console.log('hello sent.')
         },
       }).mount()
-
-      const helloButton = document.querySelector('#hello-button')
-      console.log('old school post...')
-      helloButton.addEventListener('click', () => {
-        fetch('/trigger', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ value: 'Hello' }),
-        })
-        console.log('posted.')
-      })
     </script>
   </body>
 </html>

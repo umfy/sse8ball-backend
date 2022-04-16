@@ -18,6 +18,12 @@ router
       path: 'sseServer_index.html',
     })
   })
+  .get('/ugly', async (ctx) => {
+    await ctx.send({
+      root: `${Deno.cwd()}/views`,
+      path: 'sseServer_ugly.html',
+    })
+  })
 
   // .get('/static/style.css', async (ctx) => {
   //   await ctx.send({
