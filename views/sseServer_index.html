@@ -1,157 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>8 ball SSE</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
-    <style>
-      :root {
-        --logo-size: 60px;
+  <head></head>
+  <body>
+    <button id="disconnect-button">Disconnect</button>
+    <button id="hello-button">Send Hello</button>
+    <h1>Server Sent Events</h1>
+    <ul id="events"></ul>
+    <script>
+      const sse = new EventSource('/sse')
+      const ul = document.getElementById('events')
+      sse.onmessage = (evt) => {
+        const li = document.createElement('li')
+        li.textContent = evt.data
+        // console.log(evt)
+        ul.appendChild(li)
       }
-      .ball {
-        position: relative;
-        border-radius: 50%;
-        width: var(--logo-size);
-        height: var(--logo-size);
-        overflow: hidden;
-        background: radial-gradient(
-          circle at calc(var(--logo-size) / 3) calc(var(--logo-size) / 3),
-          #444,
-          #000
-        );
-      }
-      .eight {
-        position: absolute;
-        left: calc(var(--logo-size) / 4);
-        top: calc(var(--logo-size) / 4);
-        width: calc(var(--logo-size) / 2);
-        height: calc(var(--logo-size) / 2);
-        border-radius: 50%;
-        background: #fff;
-        font-size: calc(var(--logo-size) / 3);
-        font-family: sans-serif;
-        text-align: center;
-        line-height: calc(var(--logo-size) / 2);
-      }
-    </style>
-  </head>
-  <body v-scope @vue:mounted="mounted">
-    <!-- NAVBAR -->
-
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
-          <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> -->
-          <div class="ball">
-            <div class="eight"><span>8</span></div>
-          </div>
-        </a>
-
-        <a
-          role="button"
-          class="navbar-burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item"> Home </a>
-
-          <a class="navbar-item"> Documentation </a>
-
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"> More </a>
-
-            <div class="navbar-dropdown">
-              <a class="navbar-item"> About </a>
-              <a class="navbar-item"> Jobs </a>
-              <a class="navbar-item"> Contact </a>
-              <hr class="navbar-divider" />
-              <a class="navbar-item"> Report an issue </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-secondary" @click="sayHello">
-                <strong>Send Hello</strong>
-              </a>
-              <a class="button is-primary" id="hello-button">
-                <strong>Send oldschool hi</strong>
-              </a>
-              <a
-                class="button is-danger"
-                @click="disconnect"
-                id="disconnect-button"
-              >
-                <strong> Disconnect </strong>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- PLAYROOM -->
-    <div class="columns">
-      <div class="column content">
-        <h1 class="has-text-centered">First column</h1>
-        <ol>
-          <li v-for="log of playerOneLogs">{{log.value}}</li>
-        </ol>
-      </div>
-      <div class="column">
-        <h1 class="has-text-centered">Second column</h1>
-      </div>
-    </div>
-    <script type="module">
-      import { createApp } from 'https://unpkg.com/petite-vue?module'
-
-      createApp({
-        // exposed to all expressions
-        playerOneLogs: [],
-        playerTwoLogs: [],
-        sse: undefined,
-        // getters
-
-        // methods
-        mounted() {
-          // SSE
-          this.sse = new EventSource('/sse')
-          this.sse.onmessage = (evt) => {
-            this.playerOneLogs.push(JSON.parse(evt.data))
-          }
-        },
-
-        disconnect() {
-          this.sse.close()
-          console.log('SSE connection closed.')
-        },
-        async sayHello() {
-          console.log('sending hello...')
-          const response = await fetch('/trigger', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ value: 'Hello' }),
-          })
-
-          console.log(response)
-        },
-      }).mount()
+      const disconnectButton = document.querySelector('#disconnect-button')
+      disconnectButton.addEventListener('click', () => {
+        sse.close()
+        console.log('SSE connection closed.')
+      })
+      const helloButton = document.querySelector('#hello-button')
+      helloButton.addEventListener('click', () => {
+        fetch('/trigger', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ value: 'Hello' }),
+        })
+      })
     </script>
   </body>
 </html>
