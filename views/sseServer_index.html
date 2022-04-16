@@ -84,16 +84,12 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button is-secondary" @click="sayHello">
+              <a class="button is-secondary" @click="sendHello">
                 <strong>Send Hello</strong>
-              </a>
-              <a class="button is-primary" id="hello-button">
-                <strong>Send oldschool hi</strong>
-              </a>
+              </a>              
               <a
                 class="button is-danger"
                 @click="disconnect"
-                id="disconnect-button"
               >
                 <strong> Disconnect </strong>
               </a>
@@ -129,6 +125,7 @@
         mounted() {
           // SSE
           this.sse = new EventSource('/sse')
+          console.log("Establishing SSE connection...")
           this.sse.onmessage = (evt) => {
             this.playerOneLogs.push(JSON.parse(evt.data))
           }
@@ -138,7 +135,7 @@
           this.sse.close()
           console.log('SSE connection closed.')
         },
-        async sayHello() {
+        async sendHello() {
           console.log('sending hello...')
           const response = await fetch('/trigger', {
             method: 'POST',
@@ -148,7 +145,6 @@
             },
             body: JSON.stringify({ value: 'Hello' }),
           })
-
           console.log(response)
         },
       }).mount()

@@ -15,13 +15,7 @@ router
   .get('/', async (ctx) => {
     await ctx.send({
       root: `${Deno.cwd()}/views`,
-      path: 'sseServer_index.html',
-    })
-  })
-  .get('/ugly', async (ctx) => {
-    await ctx.send({
-      root: `${Deno.cwd()}/views`,
-      path: 'sseServer_ugly.html',
+      index: 'sseServer_index.html',
     })
   })
 
@@ -32,8 +26,6 @@ router
   //   })
   // })
 
-  // for any clients that request the `/sse` endpoint, we will send a message
-  // every 2 seconds.
   .get('/sse', (ctx: Context) => {
     ctx.assert(
       ctx.request.accepts('text/event-stream'),
@@ -53,23 +45,6 @@ router
   })
 
   .post('/trigger', async (ctx: Context) => {
-    const { value } = await ctx.request.body().value
-    const evt = new ServerSentEvent('message', { value }, { id: 0 })
-
-    for (let i = 0; i < clients.length; i++) {
-      console.log(i, clients[i].closed)
-      if (clients[i].closed) {
-        clients.splice(i, 1)
-        i--
-        continue
-      }
-      // this causes uncaught errors, cannot trycatch it
-      clients[i].dispatchEvent(evt)
-    }
-    ctx.response.status = Status.Accepted
-  })
-
-  .post('/ugly/trigger', async (ctx: Context) => {
     const { value } = await ctx.request.body().value
     const evt = new ServerSentEvent('message', { value }, { id: 0 })
 
