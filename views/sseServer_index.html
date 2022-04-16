@@ -238,7 +238,7 @@
           >{{gameStart ? 'Aktywuj' : players[2].ball === 1 ? "Połówki" :
           "Pełne"}}</a
         >
-        <ul class="no-bullets">
+        <ul class="no-bullets" id="logTwo">
           <li class="m-3" v-for="log of players[2].log">{{log}}</li>
         </ul>
       </div>
@@ -279,14 +279,59 @@
         ],
         showNav: false,
         gamerulesModalVissible: false,
+        colors: {
+          0: 'rgb(251,248,215)',
+          1: 'rgb(253,198,0)',
+          2: 'rgb(56,41,171)',
+          3: 'rgb(250,28,14)',
+          4: 'rgb(52,0,77)',
+          5: 'rgb(253,117,5)',
+          6: 'rgb(1,130,73)',
+          7: 'rgb(107,1,5)',
+          8: 'rgb(24,16,16)',
+          9: 'rgb(220,220,220)',
+          10: 'rgb(253,198,0)',
+          11: 'rgb(56,41,171)',
+          12: 'rgb(250,28,14)',
+          13: 'rgb(52,0,77)',
+          14: 'rgb(253,117,5)',
+          15: 'rgb(1,130,73)',
+        },
 
+        RGB_Linear_Shade(p, c) {
+          var i = parseInt,
+            r = Math.round,
+            [a, b, c, d] = c.split(','),
+            P = p < 0,
+            t = P ? 0 : 255 * p,
+            P = P ? 1 + p : 1 - p
+          return (
+            'rgb' +
+            (d ? 'a(' : '(') +
+            r(i(a[3] == 'a' ? a.slice(5) : a.slice(4)) * P + t) +
+            ',' +
+            r(i(b) * P + t) +
+            ',' +
+            r(i(c) * P + t) +
+            (d ? ',' + d : ')')
+          )
+        },
+
+        printBall(number, color) {
+          const shade = this.RGB_Linear_Shade(0.3, color)
+          return ` <div class="ball" style="background: radial-gradient(circle at calc(var(--logo-size) / 3) calc(var(--logo-size) / 3),${shade},${color});">
+                              <div class="eight"><span>${number}</span></div></div>`
+        },
         // methods
+        selectLogSpace() {
+          if (this.activePlayer === 1) return document.querySelector('#logOne')
+          return document.querySelector('#logTwo')
+        },
         handleReading(value) {
+          const logSpace = this.selectLogSpace()
           // GAME RULES
           value = parseInt(value)
           const interval = 5000
-          console.log('aktywny ', this.activePlayer)
-          console.log('nieaktywny ', this.inactivePlayer)
           if (value > 15 || value < 0 || this.ballsPut.includes(value)) {
             return console.log(
               'Rejected incorrect ball or a duplicate: ',
@@ -324,11 +369,19 @@
             }
             if (this.players[this.activePlayer].score === 7) {
               this.players[this.activePlayer].score = 8
+              logSpace.insertAdjacentHTML(
+                'beforeend',
+                this.printBall(8, this.colors[8])
+              )
               return this.players[this.activePlayer].log.push(
                 `${this.movesCount}. Gratulacje, piękne zwycięstwo!`
               )
             }
             this.players[this.inactivePlayer].score = 8
+            logSpace.insertAdjacentHTML(
+              'beforeend',
+              this.printBall(8, this.colors[8])
+            )
             return this.players[this.activePlayer].log.push(
               `${this.movesCount}. Wbito czarną bilę, przegrywasz!`
             )
@@ -340,14 +393,23 @@
             this.players[this.inactivePlayer].ball = (value % 2) + 1
             this.gameStart = false
           }
+          // good color
           if (this.players[this.activePlayer].ball === value % 2) {
             this.players[this.activePlayer].score += 1
+            logSpace.insertAdjacentHTML(
+              'beforeend',
+              this.printBall(value, this.colors[value])
+            )
             return this.players[this.activePlayer].log.push(
               `${this.movesCount}. Wbito ${value}`
             )
           }
           // incorrect color
           this.players[this.inactivePlayer].score += 1
+          logSpace.insertAdjacentHTML(
+            'beforeend',
+            this.printBall(value, this.colors[value])
+          )
           this.players[this.activePlayer].log.push(
             `${this.movesCount}. Wbito bilę przeciwnika: ${value}`
           )
