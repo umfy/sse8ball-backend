@@ -26,6 +26,9 @@ router
   //     path: 'style.css',
   //   })
   // })
+  .get('/shit', (ctx)=>{
+    ctx.response.body = {msg: "Hello world!"};
+  })
 
   .get('/sse', (ctx: Context) => {
     ctx.assert(

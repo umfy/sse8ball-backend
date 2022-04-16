@@ -172,16 +172,21 @@
         },
 
         async sendHello() {
-          console.log('sending hello...')
-          const response = await fetch('/trigger', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ value: 'Hello' }),
-          })
-          console.log(response)
+          // console.log('sending hello...')
+          // const response = await fetch('/trigger', {
+          //   method: 'POST',
+          //   headers: {
+          //     Accept: 'application/json',
+          //     'Content-Type': 'application/json',
+          //   },
+          //   body: JSON.stringify({ value: 'Hello' }),
+          // })
+          // console.log(response)
+          const res = await fetch('/shit')
+          const msg = await res.json()
+          console.log(msg)
+          this.players[this.activePlayer].log.push(msg)
+
         },
 
         async activate(id) {
