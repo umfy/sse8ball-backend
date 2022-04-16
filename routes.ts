@@ -10,7 +10,6 @@ import {
 const router = new Router()
 
 let clients: ServerSentEventTarget[] = []
-let activePlayer = 1
 
 router
   .get('/', async (ctx) => {
@@ -45,16 +44,9 @@ router
     })
   })
 
-  .post('/activate', async (ctx: Context) => {
-    const { playerId } = await ctx.request.body().value
-    activePlayer = playerId
-    ctx.response.status = Status.Accepted
-  })
-
   .post('/trigger', async (ctx: Context) => {
     const { value } = await ctx.request.body().value
-    console.log( { value, activePlayer })
-    const evt = new ServerSentEvent('message', { value, playerId: activePlayer })
+    const evt = new ServerSentEvent('message', { value })
 
     for (let i = 0; i < clients.length; i++) {
       console.log(i, clients[i].closed)

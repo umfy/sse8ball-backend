@@ -35,14 +35,110 @@
         text-align: center;
         line-height: calc(var(--logo-size) / 2);
       }
+      ul.no-bullets {
+        list-style-type: none; /* Remove bullets */
+        padding: 0; /* Remove padding */
+        margin: 0; /* Remove margins */
+      }
     </style>
   </head>
   <body v-scope @vue:mounted="mounted">
+    <!-- MODAL -->
+
+    <div class="modal" :class="{'is-active': gamerulesModalVissible}">
+      <div class="modal-background" @click="showGamerules(false)"></div>
+      <div class="modal-content">
+        <div class="box content">
+          <h2>Bilard 8 – podstawowe zasady gry w ósemkę</h2>
+          Ósemka to najpopularniejsza odmiana bilarda w Polsce. Mecz rozgrywa
+          dwóch zawodników przy użyciu 15 bil kolorowych i bili białej. Ósemka
+          jest grą deklarowaną, co oznacza, że każde zagranie poprzedza
+          wskazanie przez gracza łuzy, w której zamierza umieścić bilę. Jakie są
+          podstawowe zasady gry i co nakazuje etykieta?
+          <h3>Bile</h3>
+          W ósemkę gra się 15 bilami kolorowymi, które dzielą się na pełne i
+          połówki. Bila z numerem 8 to bila czarna. Każdy z graczy wbija bile
+          jednego koloru, które zostały mu „przyporządkowane” po zagraniu ze
+          stołu „otwartego”. Bilard 8 jest grą deklarowaną, więc zawodnik przed
+          każdym uderzeniem musi wskazać kieszeń, w której zamierza umieścić
+          bilę. Wbicie wszystkich bil jednego koloru do łuz sprawia, że zawodnik
+          może wbić czarną bilę do wcześniej zdeklarowanej łuzy. Jeśli się mu
+          uda, wygrywa rozgrywkę. Jeżeli jednak jednocześnie wbije bilę czarną i
+          białą, przegrywa. Natomiast jeśli czarna bila wpadnie do łuzy innej
+          niż zdeklarowana, gracz traci kolejkę na rzecz przeciwnika.
+          <h3>Rozpoczęcie gry</h3>
+          Rozgrywkę rozpoczyna ustawienie bil. Bile układa się w formie
+          trójkąta, tak by wierzchołek trójkąta znalazł się w głównym punkcie
+          stołu, czarna bila w jego środku, a w jego dolnych wierzchołkach po
+          jednej połówce i pełnej. Bile muszą być ułożone losowo. Dalej
+          następuje rozgrywka o rozbicie. Polega ona na uderzeniu przez każdego
+          gracza kuli umieszczonej w polu bazy, tak by po odbiciu od górnej
+          bandy stołu, zatrzymały się jak najbliżej dolnej. Gracz, który
+          zwycięży w rozgrywce, decyduje, kto wykona rozbicie.
+          <h3>Rozbicie</h3>
+          O prawidłowym rozbiciu w bilardzie 8 mówimy, gdy biała bila jest
+          zagrywana z pola bazy i jakakolwiek bila zostanie umieszczona w łuzie;
+          przynajmniej cztery bile numerowane dotkną bandy/band. Po właściwym
+          rozbiciu stół pozostaje „otwarty”, a zawodnik zachowuje prawo do
+          kolejnego uderzenia. Do „zamknięcia” stołu dochodzi, gdy zawodnik po
+          rozbiciu umieści bilę w zadeklarowanej łuzie, co jest równoznaczne z
+          przydzieleniem rodzaju bil zawodnikowi. Gracz wykonuje zagrania do
+          momentu popełnienia faulu lub wygrania partii.
+          <h3>Błędy przy rozbiciu</h3>
+          Za błąd rozbicia uznaje się: brak wbicia jakiejkolwiek bili, brak
+          dotknięcia band przez przynajmniej cztery z kul, jednoczesne wbicie
+          czarnej i białej bili, przy czym samo wbicie czarnej bili nie jest
+          faulem oraz wybicie bili poza stół (wybita bila nie wraca na stół,
+          chyba że jest nią bila czarna, którą się repozycjonuje). W przypadku
+          popełnienia powyższych fauli stosuje się następujące rozwiązania:
+          -przy braku wbicia bili przeciwnik może zagrywać bile, pozostawiając
+          je w takim ułożeniu jak są albo od nowa ułożyć bile i wykonać rozbicie
+          bądź nakazać je drugiemu zawodnikowi; -przy jednoczesnym wbiciu białej
+          i czarnej bili przeciwnik może repozycjonować bilę nr 8 i kontynuować
+          grę -przy aktualnym ustawieniu bil z pozycji „biała z ręki”, z pola
+          bazy albo na nowo wykonać rozbicie; -przy wybiciu bili poza stół
+          przeciwnik akceptując aktualne ustawienie bil, może od razu zagrywać
+          albo zagrywać z pola bazy, z pozycji „biała z ręki”.
+          <h3>Faule</h3>
+          Faulem jest:
+          <ul>
+            <li>wybicie białej bili poza stół lub wbicie do łuzy</li>
+            <li>uderzenia białej bili w kolorową brak</li>
+            <li>uderzenie białą bilą kuli przeciwnika</li>
+            <li>
+              -wybicie kolorowej bili poza stół lub brak dotknięcia przez nią
+              bandy
+            </li>
+            <li>wyprowadzenie uderzenia, gdy bile są w ruchu</li>
+            <li>dotknięcie lub „pchnięcie” bili kijem, ręką czy ubraniem</li>
+            <li>
+              -nieprawidłowe zagranie z pola bazy lub pozycjonowanie bili białej
+            </li>
+            <li>położenie kija na stole.</li>
+          </ul>
+          <section>
+            <p class="has-text-grey">
+              źródło:
+              <a
+                href="https://www.fa-bil.pl/bilard-8-podstawowe-zasady-gry-w-osemke_31"
+                >fa-bil</a
+              >
+            </p>
+          </section>
+        </div>
+      </div>
+      <button
+        class="modal-close is-large"
+        @click="showGamerules(false)"
+        aria-label="close"
+      ></button>
+    </div>
+
     <!-- NAVBAR -->
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <a class="navbar-item">
           <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> -->
           <div class="ball">
             <div class="eight"><span>8</span></div>
@@ -55,6 +151,8 @@
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
+          @click="showNav = !showNav"
+          :class="{'is-active': showNav}"
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -62,14 +160,16 @@
         </a>
       </div>
 
-      <div id="navbarBasicExample" class="navbar-menu">
+      <div
+        id="navbarBasicExample"
+        class="navbar-menu"
+        :class="{ 'is-active' : showNav}"
+      >
         <div class="navbar-start">
-          <a class="navbar-item"> Home </a>
-
-          <a class="navbar-item"> Documentation </a>
+          <a class="navbar-item" @click="showGamerules(true)"> Zasady gry </a>
 
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"> More </a>
+            <a class="navbar-link"> Więcej </a>
 
             <div class="navbar-dropdown">
               <a class="navbar-item" @click="rollPlayerName(1)">
@@ -78,8 +178,6 @@
               <a class="navbar-item" @click="rollPlayerName(2)">
                 Losuj nazwę 2
               </a>
-              <hr class="navbar-divider" />
-              <a class="navbar-item"> Report an issue </a>
             </div>
           </div>
         </div>
@@ -104,30 +202,45 @@
     </nav>
 
     <!-- PLAYROOM -->
+    <section class="has-text-centered">
+      <progress
+        class="progress is-small is-primary"
+        :value="barValue"
+        max="100"
+      >
+        40%
+      </progress>
+    </section>
     <div class="columns">
+      <!-- FIRST PLAYER -->
       <div class="column content">
-        <h1 class="has-text-centered">{{players[1].name}}</h1>
+        <h1 class="has-text-centered my-5">{{players[1].name}}</h1>
+        <h1 class="has-text-centered">{{players[1].score}}</h1>
         <a
-          @click="activate(1)"
-          class="button is-fullwidth"
-          :class="{'is-primary': activePlayer === 1}"
-          >Aktywuj 1</a
+        @click="togglePlayer"
+        class="button is-fullwidth"
+        :class="{'is-primary': activePlayer === 1}"
+        >{{gameStart ? 'Aktywuj' : players[1].ball === 1 ? "Połówki" :
+        "Pełne"}}</a
         >
-        <ol>
-          <li v-for="log of players[1].log">{{log}}</li>
-        </ol>
+        <ul class="no-bullets">
+          <li class="m-3" v-for="log of players[1].log">{{log}}</li>
+        </ul>
       </div>
+      <!-- SECOND PLAYER -->
       <div class="column content">
-        <h1 class="has-text-centered">{{players[2].name}}</h1>
+        <h1 class="has-text-centered my-5">{{players[2].name}}</h1>
+        <h1 class="has-text-centered">{{players[2].score}}</h1>
         <a
-          @click="activate(2)"
+          @click="togglePlayer"
           class="button is-fullwidth"
           :class="{'is-primary': activePlayer === 2}"
-          >Aktywuj 2</a
+          >{{gameStart ? 'Aktywuj' : players[2].ball === 1 ? "Połówki" :
+          "Pełne"}}</a
         >
-        <ol>
-          <li v-for="log of players[2].log">{{log}}</li>
-        </ol>
+        <ul class="no-bullets">
+          <li class="m-3" v-for="log of players[2].log">{{log}}</li>
+        </ul>
       </div>
     </div>
     <script type="module">
@@ -138,26 +251,99 @@
         sse: undefined,
         sseStatus: false,
         activePlayer: 1,
+        inactivePlayer: 2,
+        blockToggle: false,
+        barValue: 100,
+        gameStart: true,
+        movesCount: 0,
+        ballsPut: [],
         players: [
           {
             id: 0,
             name: 'dummy',
-            log: [],
           },
           {
             id: 1,
             name: 'player One',
             log: [],
+            ball: 1,
+            score: 0,
           },
           {
             id: 2,
             name: 'player Two',
             log: [],
+            ball: 2,
+            score: 0,
           },
         ],
-        // getters
+        showNav: false,
+        gamerulesModalVissible: false,
 
         // methods
+        handleReading(value) {
+          const interval = 5000
+          console.log('aktywny ', this.activePlayer)
+          console.log('nieaktywny ', this.inactivePlayer)
+          if (value > 15 || value < 0 || this.ballsPut.includes(value)) {
+            return console.log(
+              'Rejected incorrect ball or a duplicate: ',
+              value
+            )
+          }
+          this.ballsPut.push(value)
+          this.movesCount += 1
+          // this.players[this.activePlayer].log.push(value)
+          if (value === 0) {
+            // white
+            if (this.movesCount === 1) {
+              this.players[this.activePlayer].log.push(
+                `${this.movesCount}. biała bila przy rozbiciu - przeciwnik ustawia ją z ręki w polu bazy`
+              )
+              return this.togglePlayer(interval)
+            }
+            this.players[this.activePlayer].log.push(
+              `${this.movesCount}. biała bila - przeciwnik ustawia białą z ręki w dowolnym miejscu`
+            )
+            return this.togglePlayer(interval)
+          }
+          if (value === 8) {
+            if (this.movesCount === 1) {
+              this.players[this.activePlayer].log.push(
+                `${this.movesCount}. Wbito czarną przy rozbiciu - ustaw ją na stole lub przeciwnik rozbija od nowa`
+              )
+              return this.togglePlayer(interval)
+            }
+            if (this.players[this.activePlayer].score === 7) {
+              return this.players[this.activePlayer].log.push(
+                `${this.movesCount}. Gratulacje, piękne zwycięstwo!`
+              )
+            }
+            return this.players[this.activePlayer].log.push(
+              `${this.movesCount}. Wbito czarną bilę, przegrywasz!`
+            )
+          }
+          // first shot
+          if (this.gameStart) {
+            // assign ball types to players
+            this.players[this.activePlayer].ball = value % 2
+            this.players[this.inactivePlayer].ball = (value % 2) + 1
+            this.gameStart = false
+          }
+          if (this.players[this.activePlayer].ball === value % 2) {
+            this.players[this.activePlayer].score += 1
+            return this.players[this.activePlayer].log.push(
+              `${this.movesCount}. Wbito ${value}`
+            )
+          }
+          // incorrect color
+          this.players[this.activePlayer].score += 1
+          this.players[this.activePlayer].log.push(
+            `${this.movesCount}. Wbito bilę przeciwnika: ${value}`
+          )
+          this.togglePlayer(interval)
+        },
+
         toggleConnection() {
           if (this.sseStatus) {
             return this.disconnect()
@@ -171,10 +357,7 @@
           this.sseStatus = true
           this.sse.onmessage = (evt) => {
             const data = JSON.parse(evt.data)
-            this.players[data.playerId].log.push(data.value)
-          }
-          this.sse.onerror = (err) => {
-            console.log('sse error:', err)
+            this.handleReading(data.value)
           }
         },
 
@@ -197,18 +380,27 @@
           console.log(response)
         },
 
-        async activate(id) {
-          console.log('activating ', id)
-          this.activePlayer = id
-          const response = await fetch('/activate', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ playerId: id }),
-          })
-          console.log(response)
+        async togglePlayer(interval = 0) {
+          if (interval !== 0) {
+            if (this.blockToggle) return
+            this.blockToggle = true
+            this.barValue = 0
+            const bar = setInterval(() => {
+              this.barValue += 1
+            }, interval / 100)
+            setTimeout(() => {
+              const temp = this.activePlayer
+              this.activePlayer = this.inactivePlayer
+              this.inactivePlayer = temp
+              this.blockToggle = false
+              this.barValue = 100
+              clearInterval(bar)
+            }, interval)
+            return
+          }
+          const temp = this.activePlayer
+          this.activePlayer = this.inactivePlayer
+          this.inactivePlayer = temp
         },
 
         async rollPlayerName(id) {
@@ -222,6 +414,9 @@
           this.players[playerIndex].name = name
         },
 
+        showGamerules(value) {
+          this.gamerulesModalVissible = value
+        },
         mounted() {
           // this.connect()
           console.log('app mounted')
