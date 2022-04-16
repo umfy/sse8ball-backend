@@ -9,6 +9,7 @@
     <style>
       :root {
         --logo-size: 60px;
+        --bone-white: rgb(251, 248, 215);
       }
       .ball {
         position: relative;
@@ -22,14 +23,28 @@
           #000
         );
       }
-      .eight {
+      .stripe-up {
+        position: absolute;
+        top: calc(var(--logo-size) / -16);
+        width: var(--logo-size);
+        height: calc(var(--logo-size) / 4);
+        background: var(--bone-white);
+      }
+      .stripe-bottom {
+        position: absolute;
+        bottom: calc(var(--logo-size) / -16);
+        width: var(--logo-size);
+        height: calc(var(--logo-size) / 4);
+        background: var(--bone-white);
+      }
+      .middle {
         position: absolute;
         left: calc(var(--logo-size) / 4);
         top: calc(var(--logo-size) / 4);
         width: calc(var(--logo-size) / 2);
         height: calc(var(--logo-size) / 2);
         border-radius: 50%;
-        background: #fff;
+        background: var(--bone-white);
         font-size: calc(var(--logo-size) / 3);
         font-family: sans-serif;
         text-align: center;
@@ -39,6 +54,22 @@
         list-style-type: none; /* Remove bullets */
         padding: 0; /* Remove padding */
         margin: 0; /* Remove margins */
+      }
+      li.removed-item {
+        animation: removed-item-animation 1.2s
+          cubic-bezier(0.55, -0.04, 0.91, 0.94) forwards;
+      }
+
+      @keyframes removed-item-animation {
+        0% {
+          opacity: 1;
+          transform: rotateZ(0);
+        }
+
+        100% {
+          opacity: 0.5;
+          transform: translateY(1000px);
+        }
       }
     </style>
   </head>
@@ -141,7 +172,7 @@
         <a class="navbar-item">
           <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> -->
           <div class="ball">
-            <div class="eight"><span>8</span></div>
+            <div class="middle"><span>8</span></div>
           </div>
         </a>
 
@@ -167,6 +198,7 @@
       >
         <div class="navbar-start">
           <a class="navbar-item" @click="showGamerules(true)"> Zasady gry </a>
+          <a class="navbar-item" @click="resetGame"> Od nowa </a>
 
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link"> Więcej </a>
@@ -220,8 +252,7 @@
           @click="togglePlayer"
           class="button is-fullwidth"
           :class="{'is-primary': activePlayer === 1}"
-          >{{gameStart ? 'Aktywuj' : players[1].ball === 1 ? "Połówki" :
-          "Pełne"}}</a
+          >{{gameStart ? 'Aktywuj' : players[1].ball? "Pełne" : "Połówki"}}</a
         >
         <ul class="no-bullets" id="logOne">
           <li class="m-3" v-for="log of players[1].log">{{log}}</li>
@@ -235,8 +266,7 @@
           @click="togglePlayer"
           class="button is-fullwidth"
           :class="{'is-primary': activePlayer === 2}"
-          >{{gameStart ? 'Aktywuj' : players[2].ball === 1 ? "Połówki" :
-          "Pełne"}}</a
+          >{{gameStart ? 'Aktywuj' : players[2].ball? "Pełne" : "Połówki"}}</a
         >
         <ul class="no-bullets" id="logTwo">
           <li class="m-3" v-for="log of players[2].log">{{log}}</li>
@@ -257,6 +287,7 @@
         gameStart: true,
         movesCount: 0,
         ballsPut: [],
+        // full ball is true, half is false
         players: [
           {
             id: 0,
@@ -266,14 +297,14 @@
             id: 1,
             name: 'player One',
             log: [],
-            ball: 1,
+            ball: false,
             score: 0,
           },
           {
             id: 2,
             name: 'player Two',
             log: [],
-            ball: 2,
+            ball: true,
             score: 0,
           },
         ],
@@ -289,13 +320,13 @@
           6: 'rgb(1,130,73)',
           7: 'rgb(107,1,5)',
           8: 'rgb(24,16,16)',
-          9: 'rgb(220,220,220)',
-          10: 'rgb(253,198,0)',
-          11: 'rgb(56,41,171)',
-          12: 'rgb(250,28,14)',
-          13: 'rgb(52,0,77)',
-          14: 'rgb(253,117,5)',
-          15: 'rgb(1,130,73)',
+          9: 'rgb(253,198,0)',
+          10: 'rgb(56,41,171)',
+          11: 'rgb(250,28,14)',
+          12: 'rgb(52,0,77)',
+          13: 'rgb(253,117,5)',
+          14: 'rgb(1,130,73)',
+          15: 'rgb(107,1,5)',
         },
 
         RGB_Linear_Shade(p, c) {
@@ -317,17 +348,30 @@
           )
         },
 
-        printBall(number, color) {
+        printFullBall(number, color) {
+          const randomPadding = Math.floor(Math.random() * 60)
           const shade = this.RGB_Linear_Shade(0.3, color)
-          return ` <div class="ball" style="background: radial-gradient(circle at calc(var(--logo-size) / 3) calc(var(--logo-size) / 3),${shade},${color});">
-                              <div class="eight"><span>${number}</span></div></div>`
+          return ` <li class="hangingBall" style="padding-left: ${randomPadding}%;"><div class="ball m-4" style="background: radial-gradient(circle at calc(var(--logo-size) / 3) calc(var(--logo-size) / 3),${shade},${color});">
+                              <div class="middle"><span>${number}</span></div></div></li>`
+        },
+        printHalfBall(number, color) {
+          const randomPadding = Math.floor(Math.random() * 60)
+          const shade = this.RGB_Linear_Shade(0.3, color)
+          return ` <li class="hangingBall" style="padding-left: ${randomPadding}%;"><div class="ball m-4" style="background: radial-gradient(circle at calc(var(--logo-size) / 3) calc(var(--logo-size) / 3),${shade},${color});">
+                              <div class="stripe-up"></div><div class="stripe-bottom"></div><div class="middle"><span>${number}</span></div></div></li>`
         },
         // methods
         selectLogSpace() {
           if (this.activePlayer === 1) return document.querySelector('#logOne')
           return document.querySelector('#logTwo')
         },
+        readBall(value) {
+          if (value < 8) return true
+          return false
+        },
+
         handleReading(value) {
+          console
           const logSpace = this.selectLogSpace()
           // GAME RULES
           value = parseInt(value)
@@ -371,7 +415,7 @@
               this.players[this.activePlayer].score = 8
               logSpace.insertAdjacentHTML(
                 'beforeend',
-                this.printBall(8, this.colors[8])
+                this.printFullBall(8, this.colors[8])
               )
               return this.players[this.activePlayer].log.push(
                 `${this.movesCount}. Gratulacje, piękne zwycięstwo!`
@@ -380,7 +424,7 @@
             this.players[this.inactivePlayer].score = 8
             logSpace.insertAdjacentHTML(
               'beforeend',
-              this.printBall(8, this.colors[8])
+              this.printFullBall(8, this.colors[8])
             )
             return this.players[this.activePlayer].log.push(
               `${this.movesCount}. Wbito czarną bilę, przegrywasz!`
@@ -389,27 +433,42 @@
           // first shot
           if (this.gameStart) {
             // assign ball types to players
-            this.players[this.activePlayer].ball = value % 2
-            this.players[this.inactivePlayer].ball = (value % 2) + 1
+            const firstBall = this.readBall(value)
+            this.players[this.activePlayer].ball = firstBall
+            this.players[this.inactivePlayer].ball = !firstBall
             this.gameStart = false
           }
           // good color
-          if (this.players[this.activePlayer].ball === value % 2) {
+          if (this.players[this.activePlayer].ball === this.readBall(value)) {
             this.players[this.activePlayer].score += 1
-            logSpace.insertAdjacentHTML(
-              'beforeend',
-              this.printBall(value, this.colors[value])
-            )
+            if (value < 8) {
+              logSpace.insertAdjacentHTML(
+                'beforeend',
+                this.printFullBall(value, this.colors[value])
+              )
+            } else {
+              logSpace.insertAdjacentHTML(
+                'beforeend',
+                this.printHalfBall(value, this.colors[value])
+              )
+            }
             return this.players[this.activePlayer].log.push(
               `${this.movesCount}. Wbito ${value}`
             )
           }
           // incorrect color
           this.players[this.inactivePlayer].score += 1
-          logSpace.insertAdjacentHTML(
-            'beforeend',
-            this.printBall(value, this.colors[value])
-          )
+          if (value < 8) {
+            logSpace.insertAdjacentHTML(
+              'beforeend',
+              this.printFullBall(value, this.colors[value])
+            )
+          } else {
+            logSpace.insertAdjacentHTML(
+              'beforeend',
+              this.printHalfBall(value, this.colors[value])
+            )
+          }
           this.players[this.activePlayer].log.push(
             `${this.movesCount}. Wbito bilę przeciwnika: ${value}`
           )
@@ -484,6 +543,42 @@
           const playerIndex = id
           const name = data.name.charAt(0).toUpperCase() + data.name.slice(1)
           this.players[playerIndex].name = name
+        },
+
+        resetGame() {
+          console.log('Resetting the game...')
+          const emptyPlayers = [
+            {
+              id: 0,
+              name: 'dummy',
+            },
+            {
+              id: 1,
+              name: 'player One',
+              log: [],
+              ball: false,
+              score: 0,
+            },
+            {
+              id: 2,
+              name: 'player Two',
+              log: [],
+              ball: true,
+              score: 0,
+            },
+          ]
+          this.gameStart = true
+          this.movesCount = 0
+          this.ballsPut = []
+          // remove all li elements
+          const hangingBalls = document.querySelectorAll('.hangingBall')
+          for (const el of hangingBalls) {
+            el.classList.add('removed-item')
+            setTimeout(() => {
+              this.players = emptyPlayers
+              el.remove()
+            }, 1200)
+          }
         },
 
         showGamerules(value) {
