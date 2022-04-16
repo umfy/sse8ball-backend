@@ -69,4 +69,21 @@ router
     ctx.response.status = Status.Accepted
   })
 
+  .post('/ugly/trigger', async (ctx: Context) => {
+    const { value } = await ctx.request.body().value
+    const evt = new ServerSentEvent('message', { value }, { id: 0 })
+
+    for (let i = 0; i < clients.length; i++) {
+      console.log(i, clients[i].closed)
+      if (clients[i].closed) {
+        clients.splice(i, 1)
+        i--
+        continue
+      }
+      // this causes uncaught errors, cannot trycatch it
+      clients[i].dispatchEvent(evt)
+    }
+    ctx.response.status = Status.Accepted
+  })
+
 export default router
