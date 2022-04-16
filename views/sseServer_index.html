@@ -217,11 +217,11 @@
         <h1 class="has-text-centered my-5">{{players[1].name}}</h1>
         <h1 class="has-text-centered">{{players[1].score}}</h1>
         <a
-        @click="togglePlayer"
-        class="button is-fullwidth"
-        :class="{'is-primary': activePlayer === 1}"
-        >{{gameStart ? 'Aktywuj' : players[1].ball === 1 ? "Połówki" :
-        "Pełne"}}</a
+          @click="togglePlayer"
+          class="button is-fullwidth"
+          :class="{'is-primary': activePlayer === 1}"
+          >{{gameStart ? 'Aktywuj' : players[1].ball === 1 ? "Połówki" :
+          "Pełne"}}</a
         >
         <ul class="no-bullets">
           <li class="m-3" v-for="log of players[1].log">{{log}}</li>
@@ -282,6 +282,8 @@
 
         // methods
         handleReading(value) {
+          // GAME RULES
+          value = parseInt(value)
           const interval = 5000
           console.log('aktywny ', this.activePlayer)
           console.log('nieaktywny ', this.inactivePlayer)
@@ -291,7 +293,7 @@
               value
             )
           }
-          this.ballsPut.push(value)
+          if (value !== 0 && value !== 8) this.ballsPut.push(value)
           this.movesCount += 1
           // this.players[this.activePlayer].log.push(value)
           if (value === 0) {
