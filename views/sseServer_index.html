@@ -107,14 +107,24 @@
     <div class="columns">
       <div class="column content">
         <h1 class="has-text-centered">{{players[1].name}}</h1>
-        <a @click="activate(1)" class="button is-fullwidth" :class="{'is-primary': activePlayer === 1}">Aktywuj 1</a>
+        <a
+          @click="activate(1)"
+          class="button is-fullwidth"
+          :class="{'is-primary': activePlayer === 1}"
+          >Aktywuj 1</a
+        >
         <ol>
           <li v-for="log of players[1].log">{{log}}</li>
         </ol>
       </div>
       <div class="column content">
         <h1 class="has-text-centered">{{players[2].name}}</h1>
-        <a @click="activate(2)" class="button is-fullwidth" :class="{'is-primary': activePlayer === 2}">Aktywuj 2</a>
+        <a
+          @click="activate(2)"
+          class="button is-fullwidth"
+          :class="{'is-primary': activePlayer === 2}"
+          >Aktywuj 2</a
+        >
         <ol>
           <li v-for="log of players[2].log">{{log}}</li>
         </ol>
@@ -132,17 +142,17 @@
           {
             id: 0,
             name: 'dummy',
-            log: []
+            log: [],
           },
           {
             id: 1,
             name: 'player One',
-            log: []
+            log: [],
           },
           {
             id: 2,
             name: 'player Two',
-            log: []
+            log: [],
           },
         ],
         // getters
@@ -162,6 +172,9 @@
           this.sse.onmessage = (evt) => {
             const data = JSON.parse(evt.data)
             this.players[data.playerId].log.push(data.value)
+          }
+          this.sse.onerror = (err) => {
+            console.log('sse error:', err)
           }
         },
 
