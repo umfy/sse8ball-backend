@@ -84,10 +84,17 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button is-primary" @click="sayHello" id="hello-button">
+              <a class="button is-secondary" @click="sayHello">
                 <strong>Send Hello</strong>
               </a>
-              <a class="button is-danger" @click="disconnect" id="disconnect-button">
+              <a class="button is-primary" id="hello-button">
+                <strong>Send oldschool hi</strong>
+              </a>
+              <a
+                class="button is-danger"
+                @click="disconnect"
+                id="disconnect-button"
+              >
                 <strong> Disconnect </strong>
               </a>
             </div>
@@ -127,11 +134,11 @@
           }
         },
 
-        disconnect(){
-        this.sse.close()
-        console.log('SSE connection closed.')
+        disconnect() {
+          this.sse.close()
+          console.log('SSE connection closed.')
         },
-        sayHello(){
+        sayHello() {
           console.log('sending hello...')
           fetch('/trigger', {
             method: 'POST',
@@ -142,8 +149,22 @@
             body: JSON.stringify({ value: 'Hello' }),
           })
           console.log('hello sent.')
-        }
+        },
       }).mount()
+
+      const helloButton = document.querySelector('#hello-button')
+      console.log('old school post...')
+      helloButton.addEventListener('click', () => {
+        fetch('/trigger', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ value: 'Hello' }),
+        })
+        console.log('posted.')
+      })
     </script>
   </body>
 </html>
